@@ -1,13 +1,25 @@
+
+if (process.env.NODE_ENV != "production")
+require('dotenv').config()
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
+const Database = require('../api/db/Database'); // Dosya yolunu kontrol et, Database.js ile aynı klasördeyse böyle
+const {CONNECTION_STRING} = require("../api/config")
+
+const db = new Database();
+db.connect({ CONNECTION_STRING });
+
+
 
 var app = express();
+
+// console.log("ENV", process.env);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,8 +36,9 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api', require('./routes/index'));
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
