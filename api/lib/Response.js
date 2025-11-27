@@ -22,6 +22,15 @@ class Response {
           description: error.description,
         },
       };
+    } else if (error.message.includes("E11000")){
+
+      return {
+      code: Enum.HTTP_CODES.CONFLICT,
+      error: {
+        message:  "Already Exists!",
+        description: "Already Exists!"
+      },
+    };
     }
 
     // Güvenli hata yakalama
