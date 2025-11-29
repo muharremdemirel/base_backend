@@ -129,12 +129,12 @@ router.post("/update", async(req, res) =>{
 
       let userRoles = await UserRoles.find({user_id: body._id});
 
-      let removedRoles = userRoles.filter(x => !body.roles.includes(x.role_id.toString()));
+      let removedRoles = userRoles.filter(x => !body.roles.includes(x.role_id));
       let newRoles = body.roles.filter(x => !userRoles.map(r => r.role_id).includes(x)); 
 
       if (removedRoles.length > 0) {
               await UserRoles.deleteMany({
-                _id: { $in: removedRoles.map((x) => x._id) },
+                _id: { $in: removedRoles.map((x) => x._id.toString()) },
               });
             }
       
