@@ -93,7 +93,7 @@ router.post("/register", async (req, res) => {
 });
 
 
-router.post("/auth", async (req, res) => {
+router.post("/auth",  async (req, res) => {
   try { 
 
     let {email, password} = req.body;
@@ -140,7 +140,7 @@ router.all("*", auth.authenticate(), (req, res, next) => {
 })
 
 /* GET users listing. */
-router.get("/", async (req, res, next) => {
+router.get("/",  auth.checkRoles("user_view"), async (req, res, next) => {
   try {
     let users = await Users.find({});
 
@@ -151,7 +151,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.post("/add", async (req, res) => {
+router.post("/add", auth.checkRoles("user_add"),async (req, res) => {
   let body = req.body;
   try {
     if (!body.email)
@@ -235,7 +235,7 @@ router.post("/add", async (req, res) => {
 });
 
 
-router.post("/update", async(req, res) =>{
+router.post("/update",  auth.checkRoles("user_update"), async(req, res) =>{
 
   let body = req.body;
   try {
@@ -296,7 +296,7 @@ router.post("/update", async(req, res) =>{
 
 });
 
-router.post("/delete", async(req, res) => {
+router.post("/delete", auth.checkRoles("user_delete"), async(req, res) => {
   try {
 
     let body = req.body;
